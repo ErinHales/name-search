@@ -3,8 +3,13 @@ export default class Names {
 
   init (arr) {
     arr.forEach(person => {
-      // uppercase whole name so it is easier to compare
+      // Uppercase whole name so it is easier to compare letters
       let n = person.name.toUpperCase();
+
+      // Is the first letter already in our trie?
+      // Yes: Move to that letter.
+      // No: Create letter and push to `firstLetters` array.
+      // TODO: Any way to extrapolate this data?
       let letterPresent = this.firstLetters.find(l => l.value === n[0])
       if (letterPresent) {
         console.log('first:', true, letterPresent);
@@ -16,7 +21,6 @@ export default class Names {
         firstLetter.populateName(n);
       }
     })
-    console.log(this.firstLetters)
   }
 }
 
@@ -28,6 +32,7 @@ class Letter {
     this.value = value;
   }
 
+  // recursive function that keeps calling until a name has been populated
   populateName (str) {
     // Remove first letter which has already been added to the trie
     const remaining = str.substr(1);
