@@ -3,6 +3,18 @@ import './Autocomplete.css';
 import Fuse from 'fuse.js';
 import faker from 'faker';
 
+// --------------- TRIE TEST START --------------
+
+import dummyNames from '../../Utils/dummyData.js';
+import Names from '../../Utils/index.js';
+
+let test = new Names();
+test.init(dummyNames);
+
+setTimeout(() => {
+  console.log(test.firstLetters);
+}, 3000);
+
 // --------------- API START --------------
 
 function simulateResponseTime({ min, max }) {
