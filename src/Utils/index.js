@@ -1,19 +1,20 @@
-// TODO: add spaces to names
-
 class Letter {
   value; // 'e'
+  path;
   extensions = []; // array of Letters: includes null if it is the end of a name
 
-  constructor (value) {
+  constructor (value, path) {
     this.value = value;
+    this.path = path;
   }
 
   // recursive function that keeps calling until a name has been populated
-  populateName (str) {
+  populateName (str, path) {
+    if (!path) { path = str; }
     // If length is 0, there are no more letters to add.
     // We push `null` to the array to signal that that is the end of a name.
     if (str.length === 0) {
-      this.extensions.push(null);
+      this.extensions.push({value: null});
       console.log('end');
     } else {
       const nextLetter = this.findExtension(str[0])
@@ -21,12 +22,13 @@ class Letter {
       const remaining = str.substr(1);
       if (nextLetter) {
         console.log('next:', true, nextLetter);
-        nextLetter.populateName(remaining);
+        nextLetter.populateName(remaining, path);
       } else {
-        let newLetter = new Letter(str[0]);
+        const newPath = path.substr(0,path.length - str.length + 1)
+        let newLetter = new Letter(str[0], newPath);
         this.extensions.push(newLetter);
         console.log('next:', false, newLetter);
-        newLetter.populateName(remaining);
+        newLetter.populateName(remaining, path);
       }
     }
   }
@@ -40,29 +42,35 @@ class Letter {
   search (str) {
     if (str.length === 0) {
       console.log(true);
-      return true;
+      return this;
     }
 
     let nextLetter = this.findExtension(str[0])
     console.log('next letter search', nextLetter);
     if (nextLetter) {
-      nextLetter.search(str.substr(1));
+      return nextLetter.search(str.substr(1));
     } else {
       console.log(false);
-      return false;
+      return null;
     }
   }
 
-  populateNames () {
+  // populateMatches () {
+  //   if (this.findExtension(null)) {
 
+  //   }
+  // }
+
+  isFullName () {
+    return this.findExtension(null);
   }
 }
 
 export default class Names {
-  firstLetters = new Letter(null); // instance of Letter
+  firstLetters = new Letter(); // instance of Letter
   // search = ''; // search text
-  // current; // current Letter
-  // matches = [];
+  current; // current Letter
+  matches = [];
 
   init (arr) {
     return new Promise((resolve, reject) => {
@@ -76,11 +84,20 @@ export default class Names {
     })
   }
 
-  search (str) {
+  async search (str) {
     // Again, capitalize so that we can compare
     const caps = str.toUpperCase();
 
-    this.firstLetters.search(caps);
+    this.current = this.firstLetters.search(caps);
+    this.populateMatches();
     // TODO: If we are still using the root string, continue down tree.  If not, start over
+  }
+
+  populateMatches () {
+    console.log('populating matches');
+    if (this.current.isFullName()) {
+      this.matches.push(this.current.path)
+    }
+    console.log(this.matches)
   }
 }
