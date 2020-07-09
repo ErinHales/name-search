@@ -8,12 +8,11 @@ import faker from 'faker';
 import dummyNames from '../../Utils/dummyData.js';
 import Names from '../../Utils/index.js';
 
+// TODO: Add error handling
 let test = new Names();
-test.init(dummyNames);
-
-setTimeout(() => {
-  console.log(test.firstLetters);
-}, 3000);
+test.init(dummyNames).then(() => {
+  test.search('Abi');
+});
 
 // --------------- API START --------------
 
