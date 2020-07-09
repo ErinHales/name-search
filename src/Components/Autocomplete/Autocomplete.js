@@ -1,17 +1,7 @@
 import React from 'react';
-import './Autocomplete.css';
-// import Fuse from 'fuse.js';
 import faker from 'faker';
-
-// --------------- TRIE TEST START --------------
-
 import Names from '../../Utils/index.js';
-
-// --------------- API START --------------
-
-// function simulateResponseTime({ min, max }) {
-//   return Math.floor(Math.random() * (max - min) + min);
-// }
+import './Autocomplete.css';
 
 /**
  * Populates an array of fake names
@@ -24,24 +14,15 @@ const users = Array.from({ length: 100 }).map(() => {
   };
 });
 
-// TODO: Add error handling
-let test = new Names();
-test.init(users).then(() => {
-  console.log('ready')
-});
-
 /**
- * lightweight fuzzy-search
+ * Gets data from an "API" and populates a trie graph with all the names
  */
-// const fuse = new Fuse(users, {
-//   shouldSort: true,
-//   threshold: 0.6,
-//   location: 0,
-//   distance: 100,
-//   maxPatternLength: 32,
-//   minMatchCharLength: 1,
-//   keys: ["name"]
-// });
+let names = new Names();
+names.init(users).then(() => {
+  console.log('ready');
+}).catch((e) => {
+  console.error(e);
+});
 
 /**
  * Search users by name
@@ -49,15 +30,8 @@ test.init(users).then(() => {
  * @return {Promise<{ name: string; email: string; }[]>} Search result
  */
 function searchUsersByName(query) {
-  // return new Promise(resolve => {
-  //   window.setTimeout(() => {
-  //     test.search
-  //   }, simulateResponseTime({ min: 200, max: 350 }));
-  // });
-  return test.search(query);
+  return names.search(query);
 }
-
-// ---------------- API END ---------------
 
 export default class Autocomplete extends React.Component {
   state = {
@@ -73,8 +47,8 @@ export default class Autocomplete extends React.Component {
   handleText = (e) => {
     this.setState({text: e.target.value});
     searchUsersByName(e.target.value);
-    this.setState({matches: test.matches});
-    console.log('matches', test.matches)
+    this.setState({matches: names.matches});
+    console.log('matches', names.matches)
   }
 
   /**
