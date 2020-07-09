@@ -11,7 +11,7 @@ import Names from '../../Utils/index.js';
 // TODO: Add error handling
 let test = new Names();
 test.init(dummyNames).then(() => {
-  test.search('Abby BEE');
+  test.search('Ab');
 });
 
 // --------------- API START --------------

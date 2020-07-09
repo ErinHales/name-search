@@ -14,20 +14,18 @@ class Letter {
     // If length is 0, there are no more letters to add.
     // We push `null` to the array to signal that that is the end of a name.
     if (str.length === 0) {
-      this.extensions.push({value: null});
-      console.log('end');
+      this.extensions.push(new Letter());
+      console.log(`${path} added to trie`);
     } else {
       const nextLetter = this.findExtension(str[0])
       // Remove first letter and pass back into populateName
       const remaining = str.substr(1);
       if (nextLetter) {
-        console.log('next:', true, nextLetter);
         nextLetter.populateName(remaining, path);
       } else {
         const newPath = path.substr(0,path.length - str.length + 1)
         let newLetter = new Letter(str[0], newPath);
         this.extensions.push(newLetter);
-        console.log('next:', false, newLetter);
         newLetter.populateName(remaining, path);
       }
     }
@@ -41,34 +39,45 @@ class Letter {
   // string must be capitalized!
   search (str) {
     if (str.length === 0) {
-      console.log(true);
+      console.log(`Path found: ${true}`);
       return this;
     }
 
     let nextLetter = this.findExtension(str[0])
-    console.log('next letter search', nextLetter);
     if (nextLetter) {
       return nextLetter.search(str.substr(1));
     } else {
-      console.log(false);
+      console.log(`Path found: ${false}`);
       return null;
     }
   }
 
-  // populateMatches () {
-  //   if (this.findExtension(null)) {
+  populateMatches (nArr) {
+    let names = nArr || [];
+    if (this.isFullName()) {
+      names.push(this.path);
+      if (this.extensions.length === 1) {
+        return names;
+      }
+    }
 
-  //   }
-  // }
+    for (var i = 0; i < this.extensions.length; i++) {
+      if (this.extensions[i] !== null) {
+        const newMatches = this.extensions[i].populateMatches();
+        names = names.concat(newMatches);
+      }
+    }
+    // TODO: this may be running more times than we want
+    return names;
+  }
 
   isFullName () {
-    return this.findExtension(null);
+    return this.extensions.find(l => !l.value);
   }
 }
 
 export default class Names {
   firstLetters = new Letter(); // instance of Letter
-  // search = ''; // search text
   current; // current Letter
   matches = [];
 
@@ -88,16 +97,16 @@ export default class Names {
     // Again, capitalize so that we can compare
     const caps = str.toUpperCase();
 
+    // Find if a path exists and get the names that match that path
     this.current = this.firstLetters.search(caps);
-    this.populateMatches();
+    if (this.current) {
+      this.populateMatches();
+    }
     // TODO: If we are still using the root string, continue down tree.  If not, start over
   }
 
   populateMatches () {
-    console.log('populating matches');
-    if (this.current.isFullName()) {
-      this.matches.push(this.current.path)
-    }
-    console.log(this.matches)
+    this.matches = this.current.populateMatches();
+    console.log('name matches', this.matches);
   }
 }
