@@ -55,7 +55,7 @@ class Letter {
   populateMatches (nArr) {
     let names = nArr || [];
     if (this.isFullName()) {
-      names.push(this.path);
+      names.push(this.path.toLowerCase());
       if (this.extensions.length === 1) {
         return names;
       }
