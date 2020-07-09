@@ -3,7 +3,8 @@ export default class Names {
 
   init (arr) {
     arr.forEach(person => {
-      let n = person.name;
+      // uppercase whole name so it is easier to compare
+      let n = person.name.toUpperCase();
       let letterPresent = this.firstLetters.find(l => l.value === n[0])
       if (letterPresent) {
         console.log('first:', true, letterPresent);
@@ -24,18 +25,21 @@ class Letter {
   extensions = []; // array of Letters
 
   constructor (value) {
-    this.value = typeof value === 'string' ? value.toUpperCase() : value;
+    this.value = value;
   }
 
   populateName (str) {
-    const remaining = str.slice(1);
+    // Remove first letter which has already been added to the trie
+    const remaining = str.substr(1);
+
+    // If length is 0, there are no more letters to add.  We push `null` to the array to signal that that is the end of a name.
     if (remaining.length === 0) {
       this.extensions.push(null);
       console.log('end');
     } else {
       let letterPresent = this.extensions.find(l => l.value === remaining[0]);
       if (letterPresent) {
-        console.log('next:', true, letterPresent.value);
+        console.log('next:', true, letterPresent);
         letterPresent.populateName(remaining);
       } else {
         let nextLetter = new Letter(remaining[0]);
