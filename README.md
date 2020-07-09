@@ -1,5 +1,14 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Project Objective
+Your task is to implement an autocomplete feature, using React.
+
+You are given an API that has a function searchUsersByName, which can be used to search for users by name.
+
+You need to implement a React component Autocomplete using the provided API function. When a user writes some text in the input, a list of user's names starting with text should populate below the input.
+
+Feel free to provide your custom renderer for the search results.
+
 ## Available Scripts
 
 In the project directory, you can run:

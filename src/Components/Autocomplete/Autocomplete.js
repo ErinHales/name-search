@@ -9,6 +9,10 @@ function simulateResponseTime({ min, max }) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
+/**
+ * Populates an array of fake names
+ * @return {Array}
+ */
 const users = Array.from({ length: 100 }).map(() => {
   return {
     name: faker.name.findName(),
@@ -16,6 +20,9 @@ const users = Array.from({ length: 100 }).map(() => {
   };
 });
 
+/**
+ * lightweight fuzzy-search
+ */
 const fuse = new Fuse(users, {
   shouldSort: true,
   threshold: 0.6,
@@ -47,6 +54,11 @@ export default class Autocomplete extends React.Component {
     matches: []
   }
 
+  /**
+   * Updates input text
+   * Searches database and sets the result to `this.state.matches`
+   * @param  {Event} e    The onChange event from typing into the input
+   */
   handleText = (e) => {
     this.setState({text: e.target.value})
     searchUsersByName(e.target.value).then(res => {
@@ -55,6 +67,10 @@ export default class Autocomplete extends React.Component {
     });
   }
 
+  /**
+   * Sets the input text to the selected name and clears the search results
+   * @param  {String} name    The selected name
+   */
   setName = (name) => {
     this.setState({
       text: name,
@@ -62,9 +78,13 @@ export default class Autocomplete extends React.Component {
     })
   }
 
-  displayNames = (array) => {
-    return array.map((person, i) => {
-      return <p key={i} onClick={() => this.setName(person.item.name)} className="results__item">{person.item.name}</p>
+  /**
+   * Maps over the search results and displays the names of each match
+   * @return {Array}    JSX array displaying the names of each match
+   */
+  displayNames = () => {
+    return this.state.matches.map((person, i) => {
+      return <p key={`${person.item.name}${i}`} onClick={() => this.setName(person.item.name)} className="results__item">{person.item.name}</p>
     })
   }
 
@@ -75,7 +95,7 @@ export default class Autocomplete extends React.Component {
         <div className="container">
           { this.state.matches.length > 0 &&
             <div className="results">
-              {this.displayNames(this.state.matches)}
+              {this.displayNames()}
             </div>
           }
         </div>
