@@ -1,6 +1,6 @@
 class Letter {
   value; // 'e'
-  path;
+  path; // 'abc' - The path leading up to this letter
   extensions = []; // array of Letters: includes null if it is the end of a name
 
   constructor (value, path) {
@@ -67,7 +67,6 @@ class Letter {
         names = names.concat(newMatches);
       }
     }
-    // TODO: this may be running more times than we want
     return names;
   }
 
@@ -93,7 +92,11 @@ export default class Names {
     })
   }
 
-  async search (str) {
+  search (str) {
+    // If there is no text, clear the matches and return
+    if (!str) {
+      return this.matches = [];
+    }
     // Again, capitalize so that we can compare
     const caps = str.toUpperCase();
 
@@ -101,6 +104,8 @@ export default class Names {
     this.current = this.firstLetters.search(caps);
     if (this.current) {
       this.populateMatches();
+    } else {
+      this.matches = [];
     }
     // TODO: If we are still using the root string, continue down tree.  If not, start over
   }
