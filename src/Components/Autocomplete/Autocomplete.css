@@ -1,0 +1,38 @@
+.input {
+  width: 500px;
+  max-width: 90vw;
+  padding: 20px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  font-size: 20px;
+  z-index: 100;
+}
+
+.container {
+  position: relative;
+  padding: 0;
+}
+
+.results {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  overflow-y: scroll;
+  background-color: rgba(0,0,0,0.1);
+  z-index: 0;
+}
+
+.results__item {
+  margin: 0;
+  padding: 10px 20px;
+  font-size: 20px;
+  text-align: left;
+}
+
+.results__item:hover {
+  background-color: rgba(0,0,0,0.2);
+  cursor: pointer;
+}
