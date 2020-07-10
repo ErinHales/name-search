@@ -15,7 +15,7 @@ class Letter {
     // We push `null` to the array to signal that that is the end of a name.
     if (str.length === 0) {
       this.extensions.push(new Letter());
-      console.log(`${path} added to trie`);
+      // console.log(`${path} added to trie`);
     } else {
       const nextLetter = this.findExtension(str[0])
       // Remove first letter and pass back into populateName
@@ -83,6 +83,7 @@ export default class Names {
   current; // current Letter
   matches = []; // list of names that are potential matches
 
+  // Build trie graph
   init (arr) {
     return new Promise((resolve, reject) => {
       arr.forEach(person => {
@@ -95,6 +96,7 @@ export default class Names {
     })
   }
 
+  // search trie graph
   search (str) {
     // If there is no text, clear the matches and return
     if (!str) {
@@ -124,6 +126,7 @@ export default class Names {
     this.searchStr = caps;
   }
 
+  // retrieve possible name matches
   populateMatches () {
     this.matches = this.current.populateMatches();
     console.log('name matches', this.matches);

@@ -9,7 +9,7 @@ import './App.css';
  * Populates an array of fake names
  * @return {Array}
  */
-const users = Array.from({ length: 200 }).map(() => {
+const users = Array.from({ length: 5000 }).map(() => {
   return {
     name: faker.name.findName(),
     email: faker.internet.email()
@@ -41,6 +41,10 @@ export default class App extends React.Component {
     }).catch((e) => {
       console.error(e);
     });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.loading !== nextState.loading;
   }
 
   /**
