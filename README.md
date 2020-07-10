@@ -24,8 +24,7 @@ Here's how `populateMatches` works. If I found a full name, it was added to an a
 NOTE:
 Although I liked logging every time a name was added to the trie graph, I found that it really slowed things down.  For fun, if you want to uncomment `line 18` in `Utils/index.js`, you can see all of the names pouring in!
 
-TODO:
-I have a cool loading component... but instead of showing while the names are populating the page seems to freeze and the user only sees a frozen input.  UPDATE: This was improved after taking out the console logs, but it is still not functioning properly.
+This also includes a cool loading component... but I think that the trie graph populates so fast that it doesn't cause the component to rerender.  I came to this conclusion because if I set a timeout and wait to return the data, the loading component renders correctly.
 
 ## Available Scripts
 
