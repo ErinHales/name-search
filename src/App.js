@@ -9,7 +9,7 @@ import './App.css';
  * Populates an array of fake names
  * @return {Array}
  */
-const users = Array.from({ length: 100 }).map(() => {
+const users = Array.from({ length: 200 }).map(() => {
   return {
     name: faker.name.findName(),
     email: faker.internet.email()

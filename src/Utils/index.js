@@ -79,6 +79,7 @@ class Letter {
 
 export default class Names {
   firstLetters = new Letter(); // instance of Letter
+  searchStr = ''
   current; // current Letter
   matches = []; // list of names that are potential matches
 
@@ -97,19 +98,30 @@ export default class Names {
   search (str) {
     // If there is no text, clear the matches and return
     if (!str) {
-      return this.matches = [];
+      this.matches = [];
+      this.searchStr = '';
+      return;
     }
-    // Again, capitalize so that we can compare
+
+    // Again, capitalize so it will be easier to compare
     const caps = str.toUpperCase();
 
-    // Find if a path exists and get the names that match that path
-    this.current = this.firstLetters.search(caps);
+    // If we are building off of an old word, there is no need to recreate the path
+    if (this.searchStr && this.current && caps.indexOf(this.searchStr) === 0) {
+      this.current = this.current.findExtension(caps[caps.length - 1]);
+    } else {
+      this.current = this.firstLetters.search(caps);
+    }
+
+    // Retrieve the names that match the path
     if (this.current) {
       this.populateMatches();
     } else {
       this.matches = [];
     }
-    // TODO: If we are still using the root string, continue down tree.  If not, start over
+
+    // set searchStr for next iteration
+    this.searchStr = caps;
   }
 
   populateMatches () {

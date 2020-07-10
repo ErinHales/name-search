@@ -16,7 +16,6 @@ export default class Autocomplete extends React.Component {
     this.setState({text: e.target.value});
     this.props.names.search(e.target.value);
     this.setState({matches: this.props.names.matches});
-    console.log('matches', this.props.names.matches)
   }
 
   /**
