@@ -31,12 +31,12 @@ class Letter {
     }
   }
 
+  // Finds the next letter. If it does not exist, returns null value
   findExtension (letter) {
     return this.extensions.find(l => l.value === letter);
   }
 
-  // searches if a string begins with these letters
-  // string must be capitalized!
+  // searches if a name starts with the given string
   search (str) {
     if (str.length === 0) {
       console.log(`Path found: ${true}`);
@@ -52,6 +52,7 @@ class Letter {
     }
   }
 
+  // recursive function that returns all the possible name matches
   populateMatches (nArr) {
     let names = nArr || [];
     if (this.isFullName()) {
@@ -70,6 +71,7 @@ class Letter {
     return names;
   }
 
+  // Checks if a path is a full name
   isFullName () {
     return this.extensions.find(l => !l.value);
   }
@@ -78,7 +80,7 @@ class Letter {
 export default class Names {
   firstLetters = new Letter(); // instance of Letter
   current; // current Letter
-  matches = [];
+  matches = []; // list of names that are potential matches
 
   init (arr) {
     return new Promise((resolve, reject) => {

@@ -1,37 +1,5 @@
 import React from 'react';
-import faker from 'faker';
-import Names from '../../Utils/index.js';
 import './Autocomplete.css';
-
-/**
- * Populates an array of fake names
- * @return {Array}
- */
-const users = Array.from({ length: 100 }).map(() => {
-  return {
-    name: faker.name.findName(),
-    email: faker.internet.email()
-  };
-});
-
-/**
- * Gets data from an "API" and populates a trie graph with all the names
- */
-let names = new Names();
-names.init(users).then(() => {
-  console.log('ready');
-}).catch((e) => {
-  console.error(e);
-});
-
-/**
- * Search users by name
- * @param {string} query - The query to search users by
- * @return {Promise<{ name: string; email: string; }[]>} Search result
- */
-function searchUsersByName(query) {
-  return names.search(query);
-}
 
 export default class Autocomplete extends React.Component {
   state = {
@@ -46,9 +14,9 @@ export default class Autocomplete extends React.Component {
    */
   handleText = (e) => {
     this.setState({text: e.target.value});
-    searchUsersByName(e.target.value);
-    this.setState({matches: names.matches});
-    console.log('matches', names.matches)
+    this.props.names.search(e.target.value);
+    this.setState({matches: this.props.names.matches});
+    console.log('matches', this.props.names.matches)
   }
 
   /**
