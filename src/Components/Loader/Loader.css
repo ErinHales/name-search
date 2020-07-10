@@ -34,11 +34,3 @@
 .circle:nth-child(3) {
   animation: bounce 1s ease-in-out infinite 300ms;
 }
-
-/* .circle2 {
-  animation: bounce 1s ease-in-out 500ms;
-}
-
-.circle3 {
-  animation: bounce 1s ease-in-out 1s;
-} */
