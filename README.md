@@ -9,6 +9,24 @@ You need to implement a React component Autocomplete using the provided API func
 
 Feel free to provide your custom renderer for the search results.
 
+## Project Description
+The autocomplete functionality has been completely refactored.  Instead of making an API call every time the user types into the input, we now call the API only once when the page is loaded.  Upon retrieval, the list is passed into the `Names.init` method which recursively builds a trie graph out of all the names.  This can handle several thousand names in less than a second!
+
+The graph is built using `Letter` nodes which keep track of:
+  * `value` (the letter itself)
+  * `path` (the path to the letter, i.e. 'Frank Lo...')
+  * and `extensions` (an array of `Letter`s, which lead to potential names)
+
+The search functionality is provided through the `Names.search` method.  Finding whether a path existed within the tree was fairly straightforward, but populating a list of all the potential matches proved to be more difficult.  First I had to determine if there **was** a path.  If there was, I had to explore all paths from that point down the tree.  I used the recursive function `populateMatches` to acheieve this. 
+
+Here's how `populateMatches` works. If I found a full name, it was added to an array which was either passed back into `populateMatches` or returned at the end of the function.  Also, just because I found a full name, didn't mean that branch was complete.  Say we had two names: "Susan Hale" and "Susan Hales".  If I returned once I found "Susan Hale" I would not be able to reach "Susan Hales".  So, full names were pushed onto the array as well as names returned by recursive called.  I knew I was finished with a branch when `Letter.isFullName` returned true and the length of `this.extensions` was 1.  In the end, this gave me a full list of possible names basically instantaneously.
+
+NOTE:
+Although I liked logging every time a name was added to the trie graph, I found that it really slowed things down.  For fun, if you want to uncomment `line 18` in `Utils/index.js`, you can see all of the names pouring in!
+
+TODO:
+I have a cool loading component... but instead of showing while the names are populating the page seems to freeze and the user only sees a frozen input.  UPDATE: This was improved after taking out the console logs, but it is still not functioning properly.
+
 ## Available Scripts
 
 In the project directory, you can run:
